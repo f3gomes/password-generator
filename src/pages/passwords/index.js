@@ -8,7 +8,13 @@ import { PasswordItem } from "../../components/passwordItem";
 export function Passwords() {
   const [listPasswords, setListPasswords] = useState([]);
   const focused = useIsFocused();
-  const { getItem } = useStorage();
+  const { getItem, removeItem } = useStorage();
+
+  const handleRemovePassword = async (item) => {
+    const passwords = await removeItem("@pass", item);
+    setListPasswords(passwords);
+    alert("Senha removida!");
+  };
 
   useEffect(() => {
     async function loadPasswords() {
@@ -31,7 +37,10 @@ export function Passwords() {
           style={{ flex: 1, paddingTop: 14 }}
           keyExtractor={(item) => String(item)}
           renderItem={({ item }) => (
-            <PasswordItem data={item} removePassword={() => {}} />
+            <PasswordItem
+              data={item}
+              removePassword={() => handleRemovePassword(item)}
+            />
           )}
         />
       </View>
